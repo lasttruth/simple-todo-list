@@ -15,7 +15,11 @@ class ListsController < ApplicationController
   get '/lists/:id/edit' do
     redirect_if_not_logged_in
     @list = List.find_by_id(params[:id])
-    erb :'lists/edit'
+    if @list && @list.user == current_user
+      erb :'lists/edit'
+    else
+      redirect to 'tasks'
+    end
   end
 
   patch '/lists/:id' do
@@ -27,6 +31,11 @@ class ListsController < ApplicationController
 
   get '/lists/:id/delete' do
     @list = List.find_by_id(params[:id])
+    if @list && @list.user == current_user
+      erb :'lists/delete'
+    else
+      redirect to 'tasks'
+    end
     erb :'lists/delete'
   end
 
