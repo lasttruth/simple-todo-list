@@ -24,7 +24,12 @@ class TasksController < ApplicationController
   get '/tasks/new/:id' do
     redirect_if_not_logged_in
     @list = List.find_by_id(params[:id])
-    erb :'/tasks/new_task'
+    if @list = current_user.lists.find_by_id(params[:id])
+      erb :'/tasks/new_task'
+    else
+      redirect to '/tasks'
+    end
+
   end
 
   post '/tasks/new/:id' do
@@ -36,7 +41,11 @@ class TasksController < ApplicationController
 # task editing
   get '/tasks/:id/edit' do
     @task = Task.find_by_id(params[:id])
-    erb :'/tasks/edit'
+    if @task = current_user.tasks.find_by_id(params[:id])
+      erb :'/tasks/edit'
+    else
+      redirect to 'tasks'
+    end
   end
 
   patch '/tasks/:id' do
@@ -49,7 +58,11 @@ class TasksController < ApplicationController
 # task deletion
   get '/tasks/:id/delete' do
     @task = Task.find_by_id(params[:id])
-    erb :'/tasks/delete'
+    if task = current_user.tasks.find_by_id(params[:id])
+      erb :'/tasks/delete'
+    else
+      redirect to '/tasks'
+    end
   end
 
   delete '/tasks/:id' do
